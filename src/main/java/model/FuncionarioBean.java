@@ -12,10 +12,9 @@ public class FuncionarioBean extends UsuarioBean {
 	public FuncionarioBean() {
 	}
 
-	public FuncionarioBean(String email, String senha, int idFuncionario, String nome, String cpf, String cargo,
+	public FuncionarioBean(String email, String senha, String nome, String cpf, String cargo,
 			boolean isFuncionarioAdmin, UnidadeBean unidade) {
 		super(email,senha);
-		this.idFuncionario = idFuncionario;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.cargo = cargo;

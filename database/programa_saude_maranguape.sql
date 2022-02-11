@@ -30,7 +30,7 @@ create table funcionarios(
 	id_funcionario int primary key auto_increment,
 	nome varchar(100) not null,
 	cpf varchar(14) not null,
-	cargo varchar(100) not null,
+	cargo varchar(100),
 	funcionario_admin tinyint default 1,
 	id_unidade_fk int not null,
 	id_usuario_fk int not null
