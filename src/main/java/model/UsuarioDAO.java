@@ -47,13 +47,18 @@ public class UsuarioDAO {
 		}
 	}
 	
-	public boolean login(UsuarioBean usuario) {
+	public UsuarioBean login(UsuarioBean usuario) {
 		
-		String query = "SELECT 1 "
-			+ "FROM usuarios u "
-			+ "WHERE email = ? "
-				+ "AND senha = ? "
-			+"LIMIT 1 ";
+		String query = "SELECT "
+				+ "	id_usuario, a.id_administrador, fa.id_funcionario 'id_funcionario_admin', "
+				+ "	f.id_funcionario, COALESCE(a.nome, fa.nome, f.nome, 'ANONIMO') nome "
+				+ "FROM usuarios u "
+				+ "LEFT JOIN administradores a ON (u.id_usuario = a.id_usuario_fk) "
+				+ "LEFT JOIN funcionarios fa ON (u.id_usuario = fa.id_usuario_fk AND fa.funcionario_admin = 1) "
+				+ "LEFT JOIN funcionarios f ON (u.id_usuario = f.id_usuario_fk AND f.funcionario_admin = 0) "
+				+ "WHERE email = ? "
+				+ "AND senha = ?"
+				+ "LIMIT 1; ";
 
 		try {
 			Connection con = Conexao.conectar();
@@ -64,19 +69,56 @@ public class UsuarioDAO {
 			prepare.setString(2, usuario.getSenha());
 
 			ResultSet resultado = prepare.executeQuery();
+
+			if(resultado.next()) {
+				
+				if (resultado.getString(2) != null) {
+					AdministradorBean administrador = new AdministradorBean();
+					administrador.setIdUsuario(resultado.getInt(1));
+					administrador.setIdAdministrador(resultado.getInt(2));
+					administrador.setNome(resultado.getString(5));
+					
+					con.close();
+					
+					return administrador;
+				}
+				
+				if (resultado.getString(3) != null || resultado.getString(4) != null) {
+					FuncionarioBean funcionario = new FuncionarioBean();
+					
+					funcionario.setIdUsuario(resultado.getInt(1));
+					
+					if (resultado.getString(3) != null) {
+						funcionario.setIdFuncionario(resultado.getInt(3));
+						funcionario.setFuncionarioAdmin(true);
+					} else {
+						funcionario.setIdFuncionario(resultado.getInt(4));
+						funcionario.setFuncionarioAdmin(false);
+					}
+
+					funcionario.setNome(resultado.getString(5));
+					
+					con.close();
+					
+					return funcionario;
+				}
+				
+				UsuarioBean usuarioAnonimo = new UsuarioBean();
+				usuarioAnonimo.setIdUsuario(resultado.getInt(1));
+				
+				con.close();
+
+				return usuarioAnonimo;
+			}
 			
-			boolean usuarioLogado = false;
-
-			if(resultado.next())
-				usuarioLogado = true;
-
 			con.close();
 			
-			return usuarioLogado;
+			return null;
+
 
 		} catch (Exception e) {
 			System.out.println(e);
-			return false;
+			return null;
 		}
 	}
 
