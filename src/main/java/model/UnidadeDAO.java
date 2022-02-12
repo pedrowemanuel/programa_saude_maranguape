@@ -51,7 +51,7 @@ public class UnidadeDAO {
 			
 			while (resultado.next()) {
 				
-				int id_unidade = Integer.parseInt(resultado.getString(1)) ;
+				int id_unidade = resultado.getInt(1) ;
 				String nome = resultado.getString(2);
 				String regiao = resultado.getString(3);
 				
