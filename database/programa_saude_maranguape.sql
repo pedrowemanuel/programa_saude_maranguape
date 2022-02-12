@@ -1,3 +1,4 @@
+drop database if exists programa_saude_maranguape ;
 create database programa_saude_maranguape;
 
 use programa_saude_maranguape ;
@@ -60,6 +61,6 @@ create table comentarios(
 	id_comentario_resp_fk int COMMENT 'Autorelacionamento: serve para referenciar o comentário pai, caso o registro seja uma resposta de comentário'
 ) ENGINE=innoDB;
 
-alter table `comentarios` add constraint `fk_comentario_postagem` foreign key ( `id_postagem_fk` ) references `postagens` ( `id_postagem` ) ;
-alter table `comentarios` add constraint `fk_comentario_comentario` foreign key ( `id_comentario_resp_fk` ) references `comentarios` ( `id_comentario` ) ;
+alter table `comentarios` add constraint `fk_comentario_postagem` foreign key ( `id_postagem_fk` ) references `postagens` ( `id_postagem` ) ON DELETE CASCADE;
+alter table `comentarios` add constraint `fk_comentario_comentario` foreign key ( `id_comentario_resp_fk` ) references `comentarios` ( `id_comentario` ) ON DELETE CASCADE;
 alter table `comentarios` add constraint `fk_comentario_usuario` foreign key ( `id_usuario_fk` ) references `usuarios` ( `id_usuario` ) ;

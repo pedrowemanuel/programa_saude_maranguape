@@ -14,6 +14,9 @@ import model.FuncionarioDAO;
 import model.UnidadeBean;
 import model.UnidadeDAO;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 /**
  * Servlet implementation class Controller
  */

@@ -7,15 +7,17 @@ public class PostagemBean {
 	private int idPostagem;
 	private String mensagem;
 	private Date data;
+	private String linkImagem;
 	private FuncionarioBean funcionario;
 	
 	public PostagemBean() {
 	}
 
-	public PostagemBean(String mensagem, Date data, FuncionarioBean funcionario) {
+	public PostagemBean(String mensagem, Date data, String linkImagem, FuncionarioBean funcionario) {
 		super();
 		this.mensagem = mensagem;
 		this.data = data;
+		this.linkImagem = linkImagem;
 		this.funcionario = funcionario;
 	}
 
@@ -41,6 +43,14 @@ public class PostagemBean {
 
 	public void setData(Date data) {
 		this.data = data;
+	}
+	
+	public String getLinkImagem() {
+		return linkImagem;
+	}
+
+	public void setLinkImagem(String linkImagem) {
+		this.linkImagem = linkImagem;
 	}
 
 	public FuncionarioBean getFuncionario() {
