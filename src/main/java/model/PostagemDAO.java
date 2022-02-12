@@ -52,6 +52,8 @@ public class PostagemDAO {
 			Connection con = Conexao.conectar();
 
 			PreparedStatement prepare = con.prepareStatement(query);
+			
+			prepare.setInt(1, unidade.getIdUnidade());
 
 			ResultSet resultado = prepare.executeQuery();
 			

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Date;
+
 public class RespostaComentarioBean extends ComentarioBean {
 	
 	private int idComentarioRespondido;
@@ -7,8 +9,8 @@ public class RespostaComentarioBean extends ComentarioBean {
 	public RespostaComentarioBean() {
 	}
 
-	public RespostaComentarioBean(String mensagem, UsuarioBean usuario, PostagemBean postagem, int idComentarioRespondido) {
-		super(mensagem, usuario, postagem);
+	public RespostaComentarioBean(String mensagem, Date data, UsuarioBean usuario, PostagemBean postagem, int idComentarioRespondido) {
+		super(mensagem, data, usuario, postagem);
 		// TODO Auto-generated constructor stub
 		
 		this.idComentarioRespondido = idComentarioRespondido;

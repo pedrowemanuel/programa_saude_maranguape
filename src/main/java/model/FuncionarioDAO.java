@@ -49,7 +49,11 @@ public class FuncionarioDAO {
 		ArrayList<FuncionarioBean> funcionarios = new ArrayList<>();
 		
 		String query = "SELECT id_funcionario, nome, cpf, cargo, id_unidade_fk, id_usuario_fk"
-			+ "FROM funcionarios f WHERE funcionario_admin = ?";
+			+ "FROM funcionarios f WHERE funcionario_admin = ? ";
+			
+		if (funcionarioFiltro.getUnidade() != null) {
+			query += " AND id_unidade_fk = ? ";
+		}
 
 		try {
 			Connection con = Conexao.conectar();
@@ -57,6 +61,10 @@ public class FuncionarioDAO {
 			PreparedStatement prepare = con.prepareStatement(query);
 			
 			prepare.setInt(1, (funcionarioFiltro.isFuncionarioAdmin() ? 1: 0));
+			
+			if (funcionarioFiltro.getUnidade() != null) {
+				prepare.setInt(2, funcionarioFiltro.getUnidade().getIdUnidade());
+			}
 
 			ResultSet resultado = prepare.executeQuery();
 			
