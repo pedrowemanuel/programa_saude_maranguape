@@ -64,3 +64,7 @@ create table comentarios(
 alter table `comentarios` add constraint `fk_comentario_postagem` foreign key ( `id_postagem_fk` ) references `postagens` ( `id_postagem` ) ON DELETE CASCADE;
 alter table `comentarios` add constraint `fk_comentario_comentario` foreign key ( `id_comentario_resp_fk` ) references `comentarios` ( `id_comentario` ) ON DELETE CASCADE;
 alter table `comentarios` add constraint `fk_comentario_usuario` foreign key ( `id_usuario_fk` ) references `usuarios` ( `id_usuario` ) ;
+
+-- administrador master
+INSERT INTO usuarios (email, senha) VALUES (1, 'root@gmail.com', 'qwer1234');
+INSERT INTO administradores (nome, id_usuario_fk) VALUES ("root", 1);
