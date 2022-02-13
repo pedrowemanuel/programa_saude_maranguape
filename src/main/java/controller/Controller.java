@@ -1,18 +1,28 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import model.AdministradorBean;
+import model.ComentarioBean;
+import model.ComentarioDAO;
 import model.FuncionarioBean;
 import model.FuncionarioDAO;
+import model.PostagemBean;
+import model.PostagemDAO;
+import model.RespostaComentarioBean;
 import model.UnidadeBean;
 import model.UnidadeDAO;
 import model.UsuarioBean;
@@ -53,6 +63,7 @@ import model.UsuarioDAO;
 		"/cidadaoCadastrarRespostaComentario",
 		"/fazerLogout"
 	})
+@MultipartConfig
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -115,8 +126,39 @@ public class Controller extends HttpServlet {
 		}   else if (action.equals("/funcionarioAdminExcluirFuncionario")) {
 			excluirFuncionario(request, response);
 			response.sendRedirect("funcionarioAdminAcessarListarFuncionarios");
-		} 
-	
+		}   else if (action.equals("/funcionarioAdminAcessarCadastroPostagem")) {
+			response.sendRedirect("cadastro_postagem_func_admin.jsp");
+		}   else if (action.equals("/funcionarioAdminCadastrarPostagem")) {
+			cadastrarPostagem(request, response);
+			response.sendRedirect("funcionarioAdminAcessarListarPostagens");
+		}   else if (action.equals("/funcionarioAdminAcessarListarPostagens")) {
+			listarPostagensFuncionarioAdmin(request, response);
+		}   else if (action.equals("/funcionarioAdminExcluirPostagem")) {
+			excluirPostagem(request, response);
+			response.sendRedirect("funcionarioAdminAcessarListarPostagens");
+		}   else if (action.equals("/funcionarioAcessarCadastroPostagem")) {
+			response.sendRedirect("cadastro_postagem_func.jsp");
+		}   else if (action.equals("/funcionarioCadastrarPostagem")) {
+			cadastrarPostagem(request, response);
+			response.sendRedirect("funcionarioAcessarListarPostagens");
+		}   else if (action.equals("/funcionarioAcessarListarPostagens")) {
+			listarPostagensFuncionario(request, response);
+		}   else if (action.equals("/funcionarioExcluirPostagem")) {
+			excluirPostagem(request, response);
+			response.sendRedirect("funcionarioAcessarListarPostagens");
+		}   else if (action.equals("/cidadaoAcessarPostagens")) {
+			listarPostagensCidadao(request, response);
+		}   else if (action.equals("/cidadaoAcessarComentarios")) {
+			listarComentarios(request, response);
+		}   else if (action.equals("/cidadaoAcessarCadastroComentario")) {
+			request.setAttribute("id_postagem", request.getParameter("id_postagem"));
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("cadastro_comentario.jsp");
+			requestDispatcher.forward(request, response);
+		}   else if (action.equals("/cidadaoCadastrarComentario")) {
+			cadastrarComentario(request, response);
+		}   else if (action.equals("/cidadaoCadastrarRespostaComentario")) {
+			cadastrarRespostaComentario(request, response);
+		}
 	}
 
 	/**
@@ -124,7 +166,17 @@ public class Controller extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		if(request.getPart("file") != null) {			
+			Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+			String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+			InputStream fileContent = filePart.getInputStream();
+			
+			request.setAttribute("link_arquivo", fileName);
+		}
+	
+	    // ... (do your job here)
+	    doGet(request, response);
 	}
 	
 	protected void fazerLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -299,5 +351,129 @@ public class Controller extends HttpServlet {
 
 		FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 		funcionarioDAO.excluir(funcionarioBean);
+	}
+	
+	protected void cadastrarPostagem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		FuncionarioBean funcionarioBean = new FuncionarioBean();
+		funcionarioBean.setIdFuncionario(Integer.parseInt(request.getParameter("id_funcionario")));
+
+		PostagemBean postagemBean = new PostagemBean(
+				request.getParameter("mensagem"),
+				new Date(),
+				request.getParameter("link_imagem"),
+				funcionarioBean
+			);
+		PostagemDAO postagemDAO = new PostagemDAO();
+		postagemDAO.cadastrar(postagemBean);
+
+	}
+	
+	protected void listarPostagensFuncionarioAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		UnidadeBean unidade = new UnidadeBean();
+		unidade.setIdUnidade(Integer.parseInt(request.getParameter("id_unidade")));
+		
+		PostagemDAO postagemDAO = new PostagemDAO();
+		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);
+		
+		request.setAttribute("postagens", postagens);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("listar_postagens_func_admin.jsp");
+		requestDispatcher.forward(request, response);
+	}
+	
+	protected void excluirPostagem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PostagemBean postagemBean = new PostagemBean();
+		postagemBean.setIdPostagem(Integer.parseInt(request.getParameter("id_postagem")));
+
+		PostagemDAO postagemDAO = new PostagemDAO();
+		postagemDAO.excluir(postagemBean);
+	}
+
+	protected void listarPostagensFuncionario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		UnidadeBean unidade = new UnidadeBean();
+		unidade.setIdUnidade(Integer.parseInt(request.getParameter("id_unidade")));
+		
+		PostagemDAO postagemDAO = new PostagemDAO();
+		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);
+		
+		request.setAttribute("postagens", postagens);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("listar_postagens_func.jsp");
+		requestDispatcher.forward(request, response);
+	}
+	
+	protected void listarPostagensCidadao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		UnidadeBean unidade = new UnidadeBean();
+		unidade.setIdUnidade(Integer.parseInt(request.getParameter("id_unidade")));
+		
+		PostagemDAO postagemDAO = new PostagemDAO();
+		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);
+		
+		request.setAttribute("postagens", postagens);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("feed_postagens.jsp");
+		requestDispatcher.forward(request, response);
+	}
+	
+	protected void listarComentarios(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PostagemBean postagem = new PostagemBean();
+		postagem.setIdPostagem(Integer.parseInt(request.getParameter("id_postagem")));
+		
+		ComentarioDAO comentarioDAO = new ComentarioDAO();
+		ArrayList<ComentarioBean> comentariosERespostas = comentarioDAO.listarComentariosERespostas(postagem);
+		
+		request.setAttribute("comentariosERespostas", comentariosERespostas);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("comentarios.jsp");
+		requestDispatcher.forward(request, response);
+	}
+	
+	protected void cadastrarComentario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PostagemBean postagemBean = new PostagemBean();
+		postagemBean.setIdPostagem(Integer.parseInt(request.getParameter("id_postagem")));
+		
+		UsuarioBean usuario = (UsuarioBean) request.getSession().getAttribute("usuario");
+
+		ComentarioBean comentarioBean = new ComentarioBean(
+				request.getParameter("mensagem"),
+				new Date(),
+				usuario,
+				postagemBean
+			);
+		
+		ComentarioDAO comentarioDAO = new ComentarioDAO();
+		comentarioDAO.cadastrar(comentarioBean);
+		
+		request.setAttribute("id_postagem", request.getParameter("id_postagem"));
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("cidadaoAcessarComentarios");
+		requestDispatcher.forward(request, response);
+
+	}
+	
+	protected void cadastrarRespostaComentario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PostagemBean postagemBean = new PostagemBean();
+		postagemBean.setIdPostagem(Integer.parseInt(request.getParameter("id_postagem")));
+		
+		UsuarioBean usuario = (UsuarioBean) request.getSession().getAttribute("usuario");
+
+		RespostaComentarioBean respostaComentarioBean = new RespostaComentarioBean(
+				request.getParameter("mensagem"),
+				new Date(),
+				usuario,
+				postagemBean,
+				Integer.parseInt(request.getParameter("id_postagem"))
+			);
+		
+		ComentarioDAO comentarioDAO = new ComentarioDAO();
+		comentarioDAO.cadastrar(respostaComentarioBean);
+		
+		request.setAttribute("id_postagem", request.getParameter("id_postagem"));
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("cidadaoAcessarComentarios");
+		requestDispatcher.forward(request, response);
+
 	}
 }
