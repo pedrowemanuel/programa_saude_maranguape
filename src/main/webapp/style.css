@@ -1,0 +1,80 @@
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css2? family= Open+Sans:wght@400;700 & display=swap');
+
+
+body{
+	
+	font-family: 'Roboto Condensed', sem serifa;
+	font-size: 2em;
+	font-weight: 400;
+	background-image:linear-gradient(to top, #5EE8FF,#005078);
+	background-attachment: fixed;
+}
+
+h1{
+	text-align: center;
+	color: #A4DDFF;
+}
+h2{
+	text-align: center;
+	color: #17C7E6;
+		
+}
+
+form table{
+	margin:auto;
+}
+
+.div{
+	text-align: center;
+	margin:auto;
+	width:100px;
+	height:10px;
+	
+}
+
+.cidadao{ 
+	border-radius: 20px;
+	border: 0;
+	cursor: pointer;
+	
+}
+.prof{
+	border-radius: 20px;
+	border: 0;
+	cursor: pointer;
+}
+.Botao1, .Botao2 {
+	text-decoration: none;
+	background-color: #005078;
+	padding: 5px 10px 5px 10px;
+	margin:auto;
+	color: #fff;
+	font-size: 1.2em;
+	font-weight:700;
+	border-radius: 5px;
+	border: 0;
+	cursor: pointer;
+}
+
+.Botao2 {
+	background-color: red;
+}
+.caixa1{
+	width: 320px;
+	padding: 5px;
+	margin-bottom: 10px;
+	border :1px solid #B31602;
+	border-radius: 5px;
+}
+.caixa2{
+	padding: 5px;
+	margin-bottom: 10px;
+	border :1px solid #B31602;
+	border-radius: 5px;
+}
+
+form label {
+	font-size: 18px;
+}

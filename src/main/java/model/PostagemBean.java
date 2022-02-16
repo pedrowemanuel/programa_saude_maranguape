@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PostagemBean {
@@ -59,6 +60,11 @@ public class PostagemBean {
 
 	public void setFuncionario(FuncionarioBean funcionario) {
 		this.funcionario = funcionario;
+	}
+	
+	public String convertDateString() {
+		SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+		return dateParser.format(this.data);
 	}
 		
 }

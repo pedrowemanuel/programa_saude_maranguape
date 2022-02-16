@@ -167,13 +167,13 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		if(request.getPart("file") != null) {			
-			Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-			String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
-			InputStream fileContent = filePart.getInputStream();
+		// if(request.getPart("file") != null) {			
+		// 	Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+		// 	String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+		// 	InputStream fileContent = filePart.getInputStream();
 			
-			request.setAttribute("link_arquivo", fileName);
-		}
+		// 	request.setAttribute("link_arquivo", fileName);
+		// }
 	
 	    // ... (do your job here)
 	    doGet(request, response);
@@ -355,8 +355,7 @@ public class Controller extends HttpServlet {
 	
 	protected void cadastrarPostagem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		FuncionarioBean funcionarioBean = new FuncionarioBean();
-		funcionarioBean.setIdFuncionario(Integer.parseInt(request.getParameter("id_funcionario")));
+		FuncionarioBean funcionarioBean = (FuncionarioBean) request.getSession().getAttribute("usuario");
 
 		PostagemBean postagemBean = new PostagemBean(
 				request.getParameter("mensagem"),
@@ -371,8 +370,9 @@ public class Controller extends HttpServlet {
 	
 	protected void listarPostagensFuncionarioAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		FuncionarioBean funcionario = (FuncionarioBean) request.getSession().getAttribute("usuario");
 		UnidadeBean unidade = new UnidadeBean();
-		unidade.setIdUnidade(Integer.parseInt(request.getParameter("id_unidade")));
+		unidade.setIdUnidade(funcionario.getUnidade().getIdUnidade());
 		
 		PostagemDAO postagemDAO = new PostagemDAO();
 		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);
@@ -393,8 +393,9 @@ public class Controller extends HttpServlet {
 
 	protected void listarPostagensFuncionario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		FuncionarioBean funcionario = (FuncionarioBean) request.getSession().getAttribute("usuario");
 		UnidadeBean unidade = new UnidadeBean();
-		unidade.setIdUnidade(Integer.parseInt(request.getParameter("id_unidade")));
+		unidade.setIdUnidade(funcionario.getUnidade().getIdUnidade());
 		
 		PostagemDAO postagemDAO = new PostagemDAO();
 		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);

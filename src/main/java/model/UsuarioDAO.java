@@ -51,7 +51,7 @@ public class UsuarioDAO {
 		
 		String query = "SELECT "
 				+ "	id_usuario, a.id_administrador, fa.id_funcionario 'id_funcionario_admin', "
-				+ "	f.id_funcionario, COALESCE(a.nome, fa.nome, f.nome, 'ANONIMO') nome "
+				+ "	f.id_funcionario, COALESCE(a.nome, fa.nome, f.nome, 'ANONIMO') nome, COALESCE(fa.id_unidade_fk, f.id_unidade_fk) id_unidade "
 				+ "FROM usuarios u "
 				+ "LEFT JOIN administradores a ON (u.id_usuario = a.id_usuario_fk) "
 				+ "LEFT JOIN funcionarios fa ON (u.id_usuario = fa.id_usuario_fk AND fa.funcionario_admin = 1) "
@@ -91,9 +91,17 @@ public class UsuarioDAO {
 					if (resultado.getString(3) != null) {
 						funcionario.setIdFuncionario(resultado.getInt(3));
 						funcionario.setFuncionarioAdmin(true);
+						
+						UnidadeBean unidade = new UnidadeBean();
+						unidade.setIdUnidade(resultado.getInt(6));
+						funcionario.setUnidade(unidade);
 					} else {
 						funcionario.setIdFuncionario(resultado.getInt(4));
 						funcionario.setFuncionarioAdmin(false);
+						
+						UnidadeBean unidade = new UnidadeBean();
+						unidade.setIdUnidade(resultado.getInt(6));
+						funcionario.setUnidade(unidade);
 					}
 
 					funcionario.setNome(resultado.getString(5));

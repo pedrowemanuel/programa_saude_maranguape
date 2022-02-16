@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -70,5 +71,9 @@ public class ComentarioBean {
 	public void setRespostas(ArrayList<RespostaComentarioBean> respostas) {
 		this.respostas = respostas;
 	}
-
+	
+	public String convertDateString() {
+		SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+		return dateParser.format(this.data);
+	}
 }

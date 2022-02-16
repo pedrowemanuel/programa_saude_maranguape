@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class PostagemDAO {
 			PreparedStatement prepare = con.prepareStatement(query);
 			
 			prepare.setString(1, postagem.getMensagem());
-			prepare.setDate(2, (Date) postagem.getData());
+			prepare.setString(2, postagem.convertDateString());
 			prepare.setString(3, postagem.getLinkImagem());
 			prepare.setInt(4, postagem.getFuncionario().getIdFuncionario());
 			
@@ -45,7 +44,7 @@ public class PostagemDAO {
 		String query = "SELECT id_postagem, mensagem, data, link_imagem, id_funcionario_fk, f.nome "
 			+ "FROM postagens p "
 			+ "JOIN funcionarios f ON (p.id_funcionario_fk = f.id_funcionario) "
-			+ "WHERE f.id_unidade_fk = ?"
+			+ "WHERE f.id_unidade_fk = ? "
 			+ "ORDER BY p.data desc";
 
 		try {

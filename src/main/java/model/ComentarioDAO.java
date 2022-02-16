@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class ComentarioDAO {
 			PreparedStatement prepare = con.prepareStatement(query);
 			
 			prepare.setString(1, comentario.getMensagem());
-			prepare.setDate(2, (Date) comentario.getData());
+			prepare.setString(2, comentario.convertDateString());
 			prepare.setInt(3, comentario.getPostagem().getIdPostagem());
 			prepare.setInt(4, comentario.getUsuario().getIdUsuario());
 			
