@@ -35,12 +35,12 @@
             </tr>
             <tr>
                 <td>
-                    <label for="link_imagem">Imagem</label>
+                    <label for="imagem">Imagem</label>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="link_imagem" id="link_imagem" class="caixa1">
+                    <input type="file" name="imagem" id="imagem" accept="image/*" class="caixa1">
                 </td>
             </tr>
             <tr>
@@ -48,7 +48,7 @@
                     <input type="submit" value="Salvar" class="Botao1">
                 </td>
                 <td>
-                    <a href="funcionario_admin_home.jsp"><input type="button" value="Voltar" class="Botao1"></a>
+                    <a href="funcionario_home.jsp"><input type="button" value="Voltar" class="Botao1"></a>
                 </td>
             </tr>
             

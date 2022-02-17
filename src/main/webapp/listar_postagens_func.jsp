@@ -42,12 +42,13 @@
 				<td><%=postagens.get(i).getMensagem()%></td>
 				<td><%=postagens.get(i).convertDateString()%></td>
 				<td align="center"> <a
-					href="javascript: confirmar(<%=postagens.get(i).getIdPostagem()%>)"
+					href="javascript: confirmar('funcionarioExcluirPostagem?id_postagem=<%=postagens.get(i).getIdPostagem()%>')"
 					class="Botao2">Excluir</a></td>
 			</tr>
 			<%}%>
 		</tbody>
 	</table>
+	<a href="funcionario_home.jsp"><input type="button" value="Voltar" class="Botao1"></a>
 
 	<script src="scripts/jquery-3.6.0.js"></script>
 	<script type="text/javascript" charset="utf8"

@@ -27,7 +27,7 @@
 				</td>
 			</tr>
 		</table>
-		<div>
+		<div class="div">
 			<input type="submit" name="submit" value="Entrar" class="Botao1">
 		</div>
 	</form>

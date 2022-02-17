@@ -1,7 +1,6 @@
 @charset "utf-8";
 
-@import url('https://fonts.googleapis.com/css2? family= Open+Sans:wght@400;700 & display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 
 body{
 	
@@ -34,18 +33,14 @@ form table{
 	
 }
 
-.cidadao{ 
+.cidadao, .prof{ 
 	border-radius: 20px;
 	border: 0;
 	cursor: pointer;
 	
 }
-.prof{
-	border-radius: 20px;
-	border: 0;
-	cursor: pointer;
-}
-.Botao1, .Botao2 {
+
+.Botao1, .Botao2, .BotaoSair {
 	text-decoration: none;
 	background-color: #005078;
 	padding: 5px 10px 5px 10px;
@@ -60,7 +55,13 @@ form table{
 
 .Botao2 {
 	background-color: red;
+	font-size: 18px;
 }
+
+.BotaoSair {
+	background-color: red;
+}
+
 .caixa1{
 	width: 320px;
 	padding: 5px;
@@ -78,3 +79,58 @@ form table{
 form label {
 	font-size: 18px;
 }
+
+/* div que irá mostrar a imagem, dentro dela terá a imagem e o conteúdo oculto*/
+.caixaImg {
+	position: relative;
+	display: inline-block;
+}
+
+/* deixar a imagem do tamanho da div*/
+.imagem {
+	display: block;
+	opacity: 0.6;
+}
+
+/*conteudo oculto*/
+.sobreposicao {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	color: #fff;
+	border-radius: 20px;
+	padding: 30px;
+}
+
+/* exibir o conteudo oculto*/
+.texto:hover {
+	background: #005078;
+}
+
+form input[type=text], form input[type=email], form input[type=password], form select {
+	height: 40px;
+	padding-left: 10px;
+}
+
+.texto {
+	transition: .5s ease;
+	opacity: 1;
+	font-size: 20px;
+	margin-bottom: 0;
+	padding: 15px;
+	border-radius: 20px;
+	text-align: center;
+	background: #276f93;
+	margin-top: 150px;
+	font-weight: bold;
+	cursor: pointer;
+	color: #fff;
+}
+
+a {
+	text-decoration: none;
+}
+
+

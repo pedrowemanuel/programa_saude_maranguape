@@ -23,7 +23,7 @@
 	
 	<a href="funcionarioAcessarCadastroPostagem"><input type="button" value="Criar Postagem" class="Botao1"></a>
 	<a href="funcionarioAcessarListarPostagens"><input type="button" value="Listar Postagens" class="Botao1"></a>
-
+	<a href="fazerLogout"><input type="button" value="Sair" class="BotaoSair"></a>
 </body>
 </html>
 

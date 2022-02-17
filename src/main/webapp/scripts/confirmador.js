@@ -2,10 +2,10 @@
  * Confirmador de exclusão contato
  */
 
-function confirmar(idcon) {
-	let resposta = confirm("Confirmar a exclusão desse contato?");
+function confirmar(link) {
+	let resposta = confirm("Confirmar a exclusão?");
 
 	if (resposta) {
-		window.location.href = "delete?idcon=" + idcon;
+		window.location.href = `${link}`;
 	}
 }

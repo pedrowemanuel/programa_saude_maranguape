@@ -1,8 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -63,9 +62,15 @@ import model.UsuarioDAO;
 		"/cidadaoCadastrarRespostaComentario",
 		"/fazerLogout"
 	})
-@MultipartConfig
+@MultipartConfig(
+		  fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+		  maxFileSize = 1024 * 1024 * 10,      // 10 MB
+		  maxRequestSize = 1024 * 1024 * 100   // 100 MB
+		)
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	// necessario alterar variavel abaixo dependendo do local em que o sistema for executado
+	private static final String BASE_DIR = "/home/pedro/eclipse-workspace2/programa_saude_maranguape/src/main/webapp/imagens_postagens/";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -99,7 +104,7 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("/fazerLogout")) {
 			fazerLogout(request,response);
 		} else if (action.equals("/cidadaoSelecionarUnidade")) {
-			response.sendRedirect("selecionarUnidade.html");
+			listarUnidadesCidadao(request, response);
 		} else if (action.equals("/adminAcessarCadastroUnidade")) {
 			response.sendRedirect("cadastro_unidade.jsp");
 		}  else if (action.equals("/adminCadastrarUnidade")) {
@@ -167,15 +172,21 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		// if(request.getPart("file") != null) {			
-		// 	Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-		// 	String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
-		// 	InputStream fileContent = filePart.getInputStream();
+		request.setAttribute("link_imagem", "");
+		
+		 if(request.getPart("imagem") != null) {			
+		 	Part filePart = request.getPart("imagem"); // Retrieves <input type="imagem" name="imagem">
+		 	String fileName = filePart.getSubmittedFileName();
+		 	
+		 	if (fileName != null) {
+			    for (Part part : request.getParts()) {
+			      part.write(BASE_DIR+fileName);
+			    }
+		 	}
 			
-		// 	request.setAttribute("link_arquivo", fileName);
-		// }
+		 	request.setAttribute("link_imagem", fileName);
+		 }
 	
-	    // ... (do your job here)
 	    doGet(request, response);
 	}
 	
@@ -237,6 +248,16 @@ public class Controller extends HttpServlet {
 		
 		request.setAttribute("unidades", unidades);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("listar_unidades.jsp");
+		requestDispatcher.forward(request, response);
+	}
+	
+	protected void listarUnidadesCidadao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		UnidadeDAO unidadeDAO = new UnidadeDAO();
+		ArrayList<UnidadeBean> unidades = unidadeDAO.listar();
+		
+		request.setAttribute("unidades", unidades);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("selecionar_unidade.jsp");
 		requestDispatcher.forward(request, response);
 	}
 	
@@ -360,7 +381,7 @@ public class Controller extends HttpServlet {
 		PostagemBean postagemBean = new PostagemBean(
 				request.getParameter("mensagem"),
 				new Date(),
-				request.getParameter("link_imagem"),
+				(String)request.getAttribute("link_imagem"),
 				funcionarioBean
 			);
 		PostagemDAO postagemDAO = new PostagemDAO();
@@ -412,6 +433,8 @@ public class Controller extends HttpServlet {
 		
 		PostagemDAO postagemDAO = new PostagemDAO();
 		ArrayList<PostagemBean> postagens = postagemDAO.listar(unidade);
+		
+		request.getSession().setAttribute("unidade", unidade);
 		
 		request.setAttribute("postagens", postagens);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("feed_postagens.jsp");
